@@ -79,12 +79,17 @@ def get_user(user_id):
         .outerjoin(Pet)\
         .filter(Person.id == user_id)
 
-    #TODO -> check if  record exists, if not return empty object
+    person = {}
     pets = []
-    for row in result:
-        if row.pet_name:
-            pets.append(row.pet_name)
 
-    person = {'id': result[0].person_id, 'name': result[0].person_name, 'pets': pets}
+    try:
+        if result[0]:
+            person = {'id': result[0].person_id, 'name': result[0].person_name}
+            for row in result:
+                if row.pet_name:
+                    pets.append(row.pet_name)
+                    person['pets'] = pets
+    except:
+        pass
 
     return jsonify(person)
