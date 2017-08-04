@@ -1,7 +1,7 @@
 from flask import request, jsonify
 
 from myapp import app, db
-from relationships import Person, Pet
+from relationships import Person, Pet, Product
 
 
 @app.route('/')
@@ -93,3 +93,23 @@ def get_user(user_id):
         pass
 
     return jsonify(person)
+
+
+@app.route('/add-product', methods=['POST'])
+def add_product():
+    product_data = request.get_json()
+    try:
+        product = Product(product_data['name'])
+        db.session.add(product)
+        db.session.commit()
+        product_record = db.session.query(Product).order_by(Product.id.desc()).first()
+        success = True
+        message = 'New product with name ' + product.name + ' added successfully'
+        data = {'id': product_record.id, 'name': product_record.name}
+    except Exception as e:
+        success = False
+        message = str(e)
+        data = None
+
+    return_data = {'success': success, 'message': message, 'data': data}
+    return jsonify(return_data)

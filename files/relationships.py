@@ -20,5 +20,13 @@ class Pet(db.Model):
         self.owner_id = owner_id
 
 
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+
+    def __init__(self, name):
+        self.name = name
+
+
 if __name__ == "__main__":
     db.create_all()
