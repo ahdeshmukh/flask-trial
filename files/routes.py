@@ -1,7 +1,7 @@
 from flask import request, jsonify
 
 from myapp import app, db
-from one_to_many import Person, Pet
+from relationships import Person, Pet
 
 
 @app.route('/')
